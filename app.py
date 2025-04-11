@@ -7,7 +7,7 @@ from ui import setup_ui  # Import setup_ui from ui.py
 # Load Environment Variables
 load_dotenv()
 
-CURRENT_VERSION = "1.0.0"  # Replace with app's current version
+CURRENT_VERSION = "1.0.1"  # Replace with app's current version
 GITHUB_API_URL = "https://api.github.com/repos/Shiboof/study_buddy/releases/latest"  # GitHub API URL for latest release
 
 

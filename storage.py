@@ -34,17 +34,17 @@ def save_study_data_to_file(study_data, filename="study_material.txt"):
             return
 
         # Write the study data to the selected file
-        with open(filename, "w") as file:
+        with open(file_path, "w") as file:
             # Write each section of the study data to the file
             file.write("Study Content:\n")
             file.write(study_data.get("content", "") + "\n\n")
             file.write("Flashcards:\n")
             file.write(study_data.get("flashcards", "") + "\n\n")
             file.write("Quiz:\n")
-            file.write(study_data.get("quiz", "") + "\n")
+            file.write(study_data.get("quiz", "") + "\n\n")
             file.write("Test:\n")
-            file.write(study_data.get("test", "") + "\n")
-        messagebox.showinfo("Success", f"Study material saved to '{filename}'")
+            file.write(study_data.get("test", "") + "\n\n")
+        messagebox.showinfo("Success", f"Study material saved to '{file_path}'")
     except Exception as e:
         messagebox.showerror("Error", f"Failed to save study material: {str(e)}")
 
