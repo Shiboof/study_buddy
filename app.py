@@ -1,15 +1,14 @@
 import customtkinter as ctk
 import requests
-from dotenv import load_dotenv  # Import load_dotenv
+from dotenv import load_dotenv
 import os
-from ui import setup_ui  # Import setup_ui from ui.py
+from pathlib import Path
+import sys
+from ui import setup_ui
 
-# Load Environment Variables
-load_dotenv()
 
-CURRENT_VERSION = "v1.0.1"  # Replace with app's current version
-GITHUB_API_URL = "https://api.github.com/repos/Shiboof/study_buddy/releases/latest"  # GitHub API URL for latest release
-
+CURRENT_VERSION = "v1.0.1"
+GITHUB_API_URL = "https://api.github.com/repos/Shiboof/study_buddy/releases/latest"
 
 def show_ctk_messagebox(title, message, message_type="info"):
     """Custom message box using customtkinter."""
@@ -18,28 +17,24 @@ def show_ctk_messagebox(title, message, message_type="info"):
     dialog.geometry("400x200")
     dialog.resizable(False, False)
 
-    # Set dialog appearance
-    ctk.set_appearance_mode("dark")  # Optional: Match the app's appearance mode
+    ctk.set_appearance_mode("dark")
 
-    # Add message label
     label = ctk.CTkLabel(dialog, text=message, font=("Helvetica", 14), wraplength=350)
     label.pack(pady=20, padx=20)
 
-    # Add OK button
     ok_button = ctk.CTkButton(dialog, text="OK", command=dialog.destroy, fg_color="blue", hover_color="darkblue")
     ok_button.pack(pady=10)
 
-    # Center the dialog on the screen
-    dialog.grab_set()  # Make the dialog modal
-    dialog.wait_window()  # Wait for the dialog to close
+    dialog.grab_set()
+    dialog.wait_window()
 
 def check_for_updates():
     """Check GitHub for the latest release version."""
     try:
         response = requests.get(GITHUB_API_URL, timeout=5)
-        response.raise_for_status()  # Raise an error for HTTP issues
+        response.raise_for_status()
         latest_release = response.json()
-        latest_version = latest_release.get("tag_name", "0.0.0")  # Get the latest version tag
+        latest_version = latest_release.get("tag_name", "0.0.0")
 
         if latest_version > CURRENT_VERSION:
             message = (
@@ -59,13 +54,8 @@ def main():
     root.title("Study Buddy")
     root.geometry("1000x600")
 
-    # Check for updates
     check_for_updates()
-
-    # Set up the UI
     setup_ui(root)
-
-    # Start the main event loop
     root.mainloop()
 
 if __name__ == "__main__":

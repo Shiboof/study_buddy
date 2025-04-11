@@ -21,12 +21,9 @@ Python 3.8 or higher
 pip (Python package manager)
 Steps
 
-Clone the repository:
-git clone https://github.com/Shiboof/study_buddy.git
-cd study_buddy
+Setting Up the Application
 
-Install the required dependencies:
-pip install -r requirements.txt
+Download the executable or source code from the [Releases](https://github.com/Shiboof/study_buddy/releases) page.
 
 Run the application:
 python app.py

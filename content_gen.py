@@ -5,14 +5,22 @@ import os
 from dotenv import load_dotenv
 from concurrent.futures import ThreadPoolExecutor
 from storage import upload_context_file, get_uploaded_context
+from pathlib import Path
+import sys
 
 '''
 This file handles the logic for generating study content, flashcards, quizzes, and tests.
 The OpenAI API is used to interact with the GPT-3.5 model.
 '''
 
-# Load environment variables
-load_dotenv()
+# Dynamically locate the .env file
+if getattr(sys, 'frozen', False):  # Check if running as a PyInstaller bundle
+    base_dir = Path(sys._MEIPASS)  # Temporary folder for PyInstaller
+else:
+    base_dir = Path(__file__).resolve().parent
+
+env_path = base_dir / ".env"
+load_dotenv(dotenv_path=env_path)
 
 # Set the OpenAI API key
 client = OpenAI()
