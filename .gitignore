@@ -1,0 +1,36 @@
+# Python-related files
+*.pyc
+*.pyo
+__pycache__/
+*.pyd
+
+# Virtual environment
+.venv/
+env/
+venv/
+
+# PyInstaller build files
+build/
+dist/
+*.spec
+
+# Logs and temporary files
+*.log
+*.tmp
+*.bak
+*.swp
+*.swo
+
+# System files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE-specific files
+.vscode/
+.idea/
+
+# Exclude everything in assets except necessary files
+assets/*
+!assets/*.png
+!assets/*.ico

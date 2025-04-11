@@ -1,0 +1,247 @@
+Study Content:
+
+
+Flashcards:
+
+
+Quiz:
+
+Test:
+Q1: What does PCEP stand for in Python programming?
+A. Python Coding Essentials Program
+B. Python Certified Entry-level Programmer
+C. Python Core Education Program
+D. Python Comprehensive Examination Process
+
+Q2: Which of the following is NOT a basic data type in Python?
+A. int
+B. str
+C. list
+D. class
+
+Q3: In Python, which keyword is used to define a function?
+A. def
+B. fun
+C. define
+D. function
+
+Q4: What is the syntax to comment out a single line in Python?
+A. //
+B. ##
+C. /*
+D. #
+
+Q5: Which of the following is a correct way to import a module in Python?
+A. import math
+B. use module math
+C. library math import
+D. include math
+
+Q6: What will be the output of the following code?
+```python
+print(2 + 3 * 5)
+```
+A. 25
+B. 17
+C. 13
+D. 10
+
+Q7: How can you check the length of a list named 'my_list' in Python?
+A. len(my_list)
+B. size(my_list)
+C. count(my_list)
+D. length(my_list)
+
+Q8: Which of the following is a mutable data type in Python?
+A. tuple
+B. list
+C. string
+D. set
+
+Q9: What is the result of the following expression in Python?
+```python
+5 > 3 and 2 < 4
+```
+A. True
+B. False
+C. Error
+D. None
+
+Q10: Which of the following is the correct way to create a dictionary in Python?
+A. {key: value}
+B. dict(key=value)
+C. create_dict(key, value)
+D. [key, value]
+
+Q11: What will be the output of the following code snippet?
+```python
+my_string = "Hello"
+print(my_string[2:])
+```
+A. ello
+B. llo
+C. Hello
+D. Hel
+
+Q12: How can you convert a string to uppercase in Python?
+A. str.upper()
+B. str.to_upper()
+C. str.uppercase()
+D. str.toUpper()
+
+Q13: What is the output of the following code?
+```python
+my_list = [1, 2, 3, 4]
+my_list.append(5)
+print(my_list)
+```
+A. [1, 2, 3, 4]
+B. [1, 2, 3, 4, 5]
+C. [5, 4, 3, 2, 1]
+D. [1, 2, 3, 4, 4]
+
+Q14: Which of the following is a correct way to create a set in Python?
+A. {1, 2, 3}
+B. set(1, 2, 3)
+C. create_set(1, 2, 3)
+D. [1, 2, 3]
+
+Q15: How can you remove an item from a list in Python?
+A. list.remove(item)
+B. list.delete(item)
+C. list.pop(item)
+D. list.clear(item)
+
+Q16: What will be the output of the following code snippet?
+```python
+my_dict = {'a': 1, 'b': 2, 'c': 3}
+print(my_dict.get('b'))
+```
+A. b
+B. 2
+C. 'b'
+D. Error
+
+Q17: Which of the following is a correct way to iterate over a list in Python?
+A. for i in range(my_list)
+B. for i in my_list
+C. for i in range(len(my_list))
+D. for i from 0 to len(my_list)
+
+Q18: How can you check if a key is present in a dictionary in Python?
+A. key in my_dict
+B. my_dict.has_key(key)
+C. my_dict.contains(key)
+D. contains_key(key, my_dict)
+
+Q19: What does the 'pass' statement do in Python?
+A. Terminates the loop
+B. Skips to the next iteration
+C. Does nothing
+D. Raises an exception
+
+Q20: Which of the following is a correct way to handle exceptions in Python?
+A. try { }
+B. catch { }
+C. except { }
+D. try-except { }
+
+Q21: What will be the result of the following expression in Python?
+```python
+5 / 2
+```
+A. 2.5
+B. 2
+C. 3
+D. 2.0
+
+Q22: How can you check if a string contains a specific substring in Python?
+A. str.contains(sub)
+B. sub in str
+C. str.find(sub)
+D. str.index(sub)
+
+Q23: What is the purpose of the 'break' statement in Python?
+A. Ends the current iteration of a loop
+B. Skips the rest of the loop and continues with the next iteration
+C. Exits the loop completely
+D. None of the above
+
+Q24: Which of the following is a correct way to open a file in Python for reading?
+A. file = open("file.txt", "w")
+B. file = open("file.txt", "r")
+C. file = open("file.txt", "read")
+D. file = open("file.txt", "open")
+
+Q25: What does the 'with' statement do in Python when handling files?
+A. Opens and closes the file automatically
+B. Reads the entire file content
+C. Writes to the file
+D. Renames the file
+
+Q26: What will be the output of the following code snippet?
+```python
+my_tuple = (1, 2, 3, 4)
+print(my_tuple[1])
+```
+A. 1
+B. 2
+C. (1, 2)
+D. Error
+
+Q27: How can you concatenate two lists in Python?
+A. list1.join(list2)
+B. list1.append(list2)
+C. list1 + list2
+D. list1.extend(list2)
+
+Q28: What will be the result of the following expression in Python?
+```python
+int("10") + 5
+```
+A. 15
+B. "10"5
+C. 105
+D. Error
+
+Q29: Which of the following is a correct way to define a class in Python?
+A. class MyClass:
+B. def MyClass():
+C. MyClass():
+D. class = MyClass{}
+
+Q30: How can you check if a number is odd in Python?
+A. num.is_odd()
+B. num % 2 == 0
+C. num.is_even()
+D. num % 2 != 0
+Q1: PCEP stands for "__________ Certified Entry-Level Python Programmer."
+Q2: In Python, the keyword used to define a function is ______.
+Q3: A ______ is a named location used to store data in Python.
+Q4: The ______ character is used to comment out code in Python.
+Q5: ______ is a popular integrated development environment (IDE) for Python.
+Q6: In Python, the operator used for exponentiation is ______.
+Q7: The function used to output data to the console in Python is ______.
+Q8: A Python ______ is a collection of items that are ordered and changeable.
+Q9: The ______ statement is used to make decisions in Python.
+Q10: To repeat a block of code a specific number of times in Python, you can use a ______ loop.
+Q11: In Python, the "==" operator is used for ______ comparison.
+Q12: To access the last item in a list in Python, you can use the index ______.
+Q13: The ______ module in Python provides functions for working with dates and times.
+Q14: A Python ______ is a block of code that only runs when it is called.
+Q15: The ______ function is used to convert a string to an integer in Python.
+Q16: ______ is an object-oriented programming principle that allows a subclass to inherit attributes and methods from a superclass.
+Q17: The ______ statement is used to handle exceptions in Python.
+Q18: The ______ method is used to remove an item from a list in Python.
+Q19: A Python ______ is a collection of key-value pairs.
+Q20: The ______ function is used to open a file in Python.
+Q21: In Python, the "and" and "or" keywords are used for ______ operations.
+Q22: The ______ method is used to add an item to the end of a list in Python.
+Q23: The ______ function is used to find the length of a string in Python.
+Q24: A Python ______ is a sequence of characters enclosed in single or double quotes.
+Q25: The ______ statement is used to exit a loop in Python.
+Q26: The ______ function is used to find the maximum value in a list in Python.
+Q27: A Python ______ is a special method that is automatically called when an object is created.
+Q28: The ______ function is used to concatenate two or more strings in Python.
+Q29: In Python, a variable is a ______ used to store data.
+Q30: The ______ function is used to convert a number to a string in Python.
