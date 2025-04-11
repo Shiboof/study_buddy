@@ -3,6 +3,8 @@ from tkinter import filedialog
 from content_gen import generate_study_content, generate_flashcards, run_quiz, run_test, upload_context_file
 from storage import save_study_data_to_file
 from PIL import Image, ImageTk  # Import Pillow for image resizing
+import sys
+from pathlib import Path
 
 '''
 File will handle the UI setup and connect the buttons to the backend logic.
@@ -32,8 +34,16 @@ def setup_ui(root):
     """Set up the UI components."""
     ctk.set_appearance_mode("light")  # Set default appearance mode to light
 
+    # Dynamically locate the assets folder
+    if getattr(sys, 'frozen', False):  # Check if running as a PyInstaller bundle
+        base_dir = Path(sys._MEIPASS)  # Temporary folder for PyInstaller
+    else:
+        base_dir = Path(__file__).resolve().parent
+
+    assets_path = base_dir / "assets"
+
     # Load and resize the moon image using CTkImage
-    moon_image_path = "assets/moon.png"  # Path to moon image
+    moon_image_path = assets_path / "moon.png"  # Path to moon image
     try:
         moon_image = Image.open(moon_image_path)  # Open the image using Pillow
         moon_photo = ctk.CTkImage(light_image=moon_image, dark_image=moon_image, size=(30, 30))  # Use CTkImage
