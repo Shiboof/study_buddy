@@ -7,7 +7,7 @@ from ui import setup_ui  # Import setup_ui from ui.py
 # Load Environment Variables
 load_dotenv()
 
-CURRENT_VERSION = "1.0.1"  # Replace with app's current version
+CURRENT_VERSION = "v1.0.1"  # Replace with app's current version
 GITHUB_API_URL = "https://api.github.com/repos/Shiboof/study_buddy/releases/latest"  # GitHub API URL for latest release
 
 
@@ -42,10 +42,12 @@ def check_for_updates():
         latest_version = latest_release.get("tag_name", "0.0.0")  # Get the latest version tag
 
         if latest_version > CURRENT_VERSION:
-            show_ctk_messagebox(
-                "Update Available",
-                f"A new version ({latest_version}) is available! Please update your application."
+            message = (
+                f"A new version ({latest_version}) is available!\n"
+                f"Please update your application.\n\n"
+                f"Visit\nhttps://github.com/Shiboof/study_buddy/releases\n to download the latest version."
             )
+            show_ctk_messagebox("Update Available", message)
         else:
             show_ctk_messagebox("Up-to-Date", "You are using the latest version.")
     except requests.RequestException as e:
