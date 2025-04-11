@@ -1,5 +1,5 @@
 import json
-from tkinter import messagebox
+from tkinter import messagebox, filedialog
 
 '''
 File will handle saving and loading study data
@@ -24,6 +24,16 @@ def get_uploaded_context():
 def save_study_data_to_file(study_data, filename="study_material.txt"):
     """Save the study data to a plain text file."""
     try:
+        # Open a file dialog for the user to choose
+        file_path = filedialog.asksaveasfilename(
+            title="Save Study Material",
+            defaultextension=".txt",
+            filetypes=[("Text files", "*.txt"), ("All files", "*.*")]
+        )
+        if not file_path:
+            return
+
+        # Write the study data to the selected file
         with open(filename, "w") as file:
             # Write each section of the study data to the file
             file.write("Study Content:\n")

@@ -81,7 +81,7 @@ def setup_ui(root):
     buttons.append(ctk.CTkButton(button_frame, text="Generate Study Content", 
                                  command=lambda: generate_study_content(entry.get(), output_box, study_data), 
                                  fg_color="blue", hover_color="darkblue", width=200, height=40, corner_radius=10))
-    buttons.append(ctk.CTkButton(button_frame, text="Show Flashcards", 
+    buttons.append(ctk.CTkButton(button_frame, text="Generate Flashcards", 
                                  command=lambda: generate_flashcards(entry.get(), output_box, study_data), 
                                  fg_color="green", hover_color="darkgreen", width=200, height=40, corner_radius=10))
     buttons.append(ctk.CTkButton(button_frame, text="Generate Quiz", 
@@ -126,20 +126,4 @@ def upload_file(output_box):
     if file_path:
         result = upload_context_file(file_path)  # Call the function in content_gen.py
         output_box.insert("end", f"{result}\n")
-
-# Create root window
-root = ctk.CTk()
-root.title("Study Buddy")
-root.geometry("1000x600")
-
-# Configure resizing behavior
-root.grid_rowconfigure(3, weight=1)
-root.grid_columnconfigure(0, weight=1)
-
-def main():
-    setup_ui(root)
-    root.mainloop()
-
-if __name__ == "__main__":
-    main()
-
+        output_box.insert("end", f"File uploaded: {file_path}\n")

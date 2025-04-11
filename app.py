@@ -1,9 +1,15 @@
 import customtkinter as ctk
 import requests
-from ui import setup_ui
+from dotenv import load_dotenv  # Import load_dotenv
+import os
+from ui import setup_ui  # Import setup_ui from ui.py
 
-GITHUB_API_URL = "https://api.github.com/repos/<username>/<repository>/releases/latest"
-CURRENT_VERSION = "1.0.0"  # Replace with your app's current version
+# Load Environment Variables
+load_dotenv()
+
+CURRENT_VERSION = "1.0.0"  # Replace with app's current version
+GITHUB_API_URL = "https://api.github.com/repos/Shiboof/study_buddy/releases/latest"  # GitHub API URL for latest release
+
 
 def show_ctk_messagebox(title, message, message_type="info"):
     """Custom message box using customtkinter."""
@@ -49,8 +55,7 @@ def main():
     """Main entry point for the Study Buddy application."""
     root = ctk.CTk()
     root.title("Study Buddy")
-    root.geometry("600x600")
-    root.configure(fg_color="white")
+    root.geometry("1000x600")
 
     # Check for updates
     check_for_updates()
