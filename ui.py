@@ -1,6 +1,6 @@
 import customtkinter as ctk
 from tkinter import filedialog
-from content_gen import generate_study_content, generate_flashcards, run_quiz, run_test, upload_context_file
+from content_gen import generate_study_content, generate_flashcards, run_quiz, run_test, upload_context_file, generate_answers
 from storage import save_study_data_to_file
 from PIL import Image, ImageTk  # Import Pillow for image resizing
 import sys
@@ -82,6 +82,27 @@ def setup_ui(root):
     entry = ctk.CTkEntry(input_frame, width=300, font=("Helvetica", 12))
     entry.grid(row=0, column=1, padx=5, pady=5, sticky="w")
 
+    # Frame for study data display
+    study_data_frame = ctk.CTkFrame(root)
+    study_data_frame.pack(side="right", padx =10, pady=10, fill="y") # Postion the study data drame on the
+
+    study_data_label = ctk.CTkLabel(study_data_frame, text="Downloadable Content:", font=("Helvetica", 14, "bold"))
+    study_data_label.pack(pady=5) # Add padding around the label
+
+    # Add a CTkTexbox to the study_data_frame
+    study_data_box = ctk.CTkTextbox(study_data_frame, width=300, height=400, font=("Helvetica", 10))
+    study_data_box.pack(fill="both", expand=True)
+
+    def update_study_data_display():
+        """Update the study data display area."""
+        # Clear current contents of the frame
+        # Clear the current contents of the textbox
+        study_data_box.delete("1.0", "end")
+
+        # Add each key-value pair from study_data to the textbox
+        for key, value in study_data.items():
+            study_data_box.insert("end", f"{key.capitalize()}:\n{value if value else 'No data'}\n\n")
+
     # Button Frame
     button_frame = ctk.CTkFrame(root)
     button_frame.pack(pady=10)
@@ -89,16 +110,16 @@ def setup_ui(root):
     # Create buttons using ctk.CTkButton
     buttons = []
     buttons.append(ctk.CTkButton(button_frame, text="Generate Study Content", 
-                                 command=lambda: generate_study_content(entry.get(), output_box, study_data), 
+                                 command=lambda: [generate_study_content(entry.get(), output_box, study_data), update_study_data_display()], 
                                  fg_color="blue", hover_color="darkblue", width=200, height=40, corner_radius=10))
     buttons.append(ctk.CTkButton(button_frame, text="Generate Flashcards", 
-                                 command=lambda: generate_flashcards(entry.get(), output_box, study_data), 
+                                 command=lambda: [generate_flashcards(entry.get(), output_box, study_data), update_study_data_display()], 
                                  fg_color="green", hover_color="darkgreen", width=200, height=40, corner_radius=10))
     buttons.append(ctk.CTkButton(button_frame, text="Generate Quiz", 
-                                 command=lambda: run_quiz(entry.get(), output_box, study_data), 
+                                 command=lambda: [run_quiz(entry.get(), output_box, study_data), update_study_data_display()], 
                                  fg_color="orange", hover_color="gold", width=200, height=40, corner_radius=10))
     buttons.append(ctk.CTkButton(button_frame, text="Generate Test", 
-                                 command=lambda: run_test(entry.get(), output_box, study_data), 
+                                 command=lambda: [run_test(entry.get(), output_box, study_data), update_study_data_display()], 
                                  fg_color="orange", hover_color="gold", width=200, height=40, corner_radius=10))
     buttons.append(ctk.CTkButton(button_frame, text="Upload Context File", 
                                  command=lambda: upload_file(output_box), 
@@ -106,6 +127,9 @@ def setup_ui(root):
     buttons.append(ctk.CTkButton(button_frame, text="Download Content", 
                                  command=lambda: save_study_data_to_file(study_data), 
                                  fg_color="coral", hover_color="darkred", width=200, height=40, corner_radius=10))
+    buttons.append(ctk.CTkButton(button_frame, text="Study Data Answers",
+                                command=lambda: [generate_answers(output_box, study_data), update_study_data_display()],
+                                fg_color="purple", hover_color="darkviolet", width=200, height=40, corner_radius=10))
 
     # Arrange buttons in a grid
     for i, button in enumerate(buttons):
@@ -118,14 +142,9 @@ def setup_ui(root):
     output_label = ctk.CTkLabel(output_frame, text="Output:", font=("Helvetica", 12))
     output_label.pack(anchor="w")
 
-    # Add a scrollbar to the output box
-    output_scrollbar = ctk.CTkScrollbar(output_frame)
-    output_scrollbar.pack(side="right", fill="y")
-
     global output_box
-    output_box = ctk.CTkTextbox(output_frame, height=15, width=70, font=("Helvetica", 10), yscrollcommand=output_scrollbar.set)
+    output_box = ctk.CTkTextbox(output_frame, height=15, width=70, font=("Helvetica", 10))
     output_box.pack(side="left", fill="both", expand=True)
-    output_scrollbar.configure(command=output_box.yview)
 
 def upload_file(output_box):
     """Open a file dialog to upload a file and store its content."""

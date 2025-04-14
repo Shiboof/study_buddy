@@ -149,3 +149,61 @@ def run_test(topic, output_box, study_data):
     except Exception as e:
         output_box.insert(tk.END, f"{e}")
         messagebox.showerror("Error", str(e))
+
+def generate_answers(output_box, study_data):
+    """Generate answers for quizzes and tests in the study_data dictionary."""
+    output_box.delete("1.0", tk.END)
+    output_box.insert(tk.END, "Generating answers for quizzes and tests...\n")
+    try:
+        # Check if quiz or test data exists
+        if not study_data.get("quiz") and not study_data.get("test"):
+            raise Exception("No quiz or test data found to generate answers.")
+
+        answers = ""
+
+        # Generate answers for the quiz
+        if study_data.get("quiz"):
+            output_box.insert(tk.END, "Generating answers for the quiz...\n")
+            quiz_questions = study_data["quiz"].split("\n")  # Split quiz into individual questions
+            quiz_answers = []
+            for question in quiz_questions:
+                if question.strip():  # Skip empty lines
+                    quiz_messages = [
+                        {
+                            "role": "user",
+                            "content": f"Provide an answer for the following question:\n{question}"
+                        }
+                    ]
+                    answer = call_openai_api(model="gpt-3.5-turbo", messages=quiz_messages)
+                    if answer.startswith("Error:"):
+                        raise Exception(answer)
+                    quiz_answers.append(f"{question}\nAnswer: {answer.strip()}\n")
+            answers += "Quiz Answers:\n" + "\n".join(quiz_answers) + "\n\n"
+
+        # Generate answers for the test
+        if study_data.get("test"):
+            output_box.insert(tk.END, "Generating answers for the test...\n")
+            test_questions = study_data["test"].split("\n")  # Split test into individual questions
+            test_answers = []
+            for question in test_questions:
+                if question.strip():  # Skip empty lines
+                    test_messages = [
+                        {
+                            "role": "user",
+                            "content": f"Provide an answer for the following question:\n{question}"
+                        }
+                    ]
+                    answer = call_openai_api(model="gpt-3.5-turbo", messages=test_messages)
+                    if answer.startswith("Error:"):
+                        raise Exception(answer)
+                    test_answers.append(f"{question}\nAnswer: {answer.strip()}\n")
+            answers += "Test Answers:\n" + "\n".join(test_answers) + "\n\n"
+
+        # Save the answers to the study_data dictionary
+        study_data["answers"] = answers
+
+        # Display the answers in the output box
+        output_box.insert(tk.END, f"Answers:\n{answers}\n")
+    except Exception as e:
+        output_box.insert(tk.END, f"{e}")
+        messagebox.showerror("Error", str(e))
