@@ -1,38 +1,105 @@
-# Python-related files
-*.pyc
-*.pyo
+# ───────── Python ───────── #
 __pycache__/
+*.py[cod]
+*.pyo
 *.pyd
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# ───────── Environment Variables ───────── #
+.env
 
 # Virtual environment
 .venv/
-.env/
 env/
-.env
 venv/
 
-# PyInstaller build files
+# ───────── Virtual Environments ───────── #
+.venv/
+env/
+venv/
+ENV/
+
+# ───────── OS Files ───────── #
+.DS_Store
+Thumbs.db
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# ───────── PyInstaller ───────── #
 build/
 dist/
 *.spec
 
-# Logs and temporary files
+# Python egg files
+*.egg
+*.egg-info/
+dist/
+build/
+*.manifest
+*.spec
+
+# ───────── Logs ───────── #
 *.log
-*.tmp
-*.bak
-*.swp
-*.swo
+firebase-debug.log
 
-# System files
-.DS_Store
-Thumbs.db
-desktop.ini
+# Logs and debug files
+*.log
+*.out
+*.err
 
-# IDE-specific files
+# ───────── IDE / Editor Files ───────── #
 .vscode/
 .idea/
+*.sublime-project
+*.sublime-workspace
 
-# Exclude everything in assets except necessary files
-assets/*
-!assets/*.png
-!assets/*.ico
+# VSCode settings
+.vscode/
+
+# IDE-specific files
+.idea/
+*.iml
+
+# ───────── Jupyter / IPython ───────── #
+.ipynb_checkpoints
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# ───────── Firebase ───────── #
+.firebaserc
+firebase.json
+public/
+
+# Public directory (if dynamically generated)
+public/*.tmp
+
+# ───────── Docker ───────── #
+*.tar
+*.bak
+*.swp
+
+# Docker-related files
+*.env
+.env.*
+docker-compose.override.yml
+
+# ───────── App Data ───────── #
+tasks.json
+study_material.txt
+assets/
+
+# Flask cache and session files
+instance/
+*.db
+*.sqlite3
+
+# Pytest cache
+.pytest_cache/

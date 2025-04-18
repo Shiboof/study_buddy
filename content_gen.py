@@ -4,29 +4,22 @@ from openai import OpenAI
 import os
 from dotenv import load_dotenv
 from concurrent.futures import ThreadPoolExecutor
-from storage import upload_context_file, get_uploaded_context
+from api.storage import upload_context_file, get_uploaded_context
 from pathlib import Path
 import sys
 
-'''
-This file handles the logic for generating study content, flashcards, quizzes, and tests.
-The OpenAI API is used to interact with the GPT-3.5 model.
-'''
-
 # Dynamically locate the .env file
-if getattr(sys, 'frozen', False):  # Check if running as a PyInstaller bundle
-    base_dir = Path(sys._MEIPASS)  # Temporary folder for PyInstaller
+if getattr(sys, 'frozen', False):
+    base_dir = Path(sys._MEIPASS)
 else:
     base_dir = Path(__file__).resolve().parent
 
 env_path = base_dir / ".env"
 load_dotenv(dotenv_path=env_path)
 
-# Set the OpenAI API key
 client = OpenAI()
 
 def call_openai_api(model, messages, max_tokens=500, temperature=0.7):
-    """Call the OpenAI API using OpenAI SDK >=1.0.0"""
     try:
         response = client.chat.completions.create(
             model=model,
@@ -36,10 +29,9 @@ def call_openai_api(model, messages, max_tokens=500, temperature=0.7):
         )
         return response.choices[0].message.content
     except Exception as e:
-        return f"Error: {str(e)}"
+        raise RuntimeError(f"OpenAI API error: {str(e)}")
 
 def generate_study_content(topic, output_box, study_data):
-    """Generate study content for the given topic."""
     output_box.delete("1.0", tk.END)
     output_box.insert(tk.END, f"Generating study content for {topic}...\n")
     try:
@@ -48,18 +40,15 @@ def generate_study_content(topic, output_box, study_data):
             {"role": "system", "content": "You are a helpful study assistant."},
             {"role": "user", "content": f"Use the following context:\n{context}\nGenerate a study summary for the topic '{topic}'."}
         ]
-        # Call the OpenAI API to generate the study content
         summary = call_openai_api(model="gpt-3.5-turbo-0125", messages=messages)
-        if summary.startswith("Error:"):
-            raise Exception(summary)
         output_box.insert(tk.END, summary)
         study_data["content"] = summary
     except Exception as e:
-        output_box.insert(tk.END, f"{e}")
-        messagebox.showerror("Error", str(e))
+        error_msg = f"Error generating study content: {e}"
+        output_box.insert(tk.END, error_msg)
+        messagebox.showerror("Error", error_msg)
 
 def generate_flashcards(topic, output_box, study_data):
-    """Generate flashcards for the given topic."""
     output_box.delete("1.0", tk.END)
     output_box.insert(tk.END, f"Generating flashcards for {topic}...\n")
     try:
@@ -69,16 +58,14 @@ def generate_flashcards(topic, output_box, study_data):
             {"role": "user", "content": f"Use the following context:\n{context}\nGenerate 5 flashcards (Q&A pairs) about {topic}, formatted as 'Q: ... A: ...'"}
         ]
         flashcards = call_openai_api(model="gpt-3.5-turbo", messages=messages)
-        if flashcards.startswith("Error:"):
-            raise Exception(flashcards)
         output_box.insert(tk.END, f"\nFlashcards:\n{flashcards}")
         study_data["flashcards"] = flashcards
     except Exception as e:
-        output_box.insert(tk.END, f"{e}")
-        messagebox.showerror("Error", str(e))
+        error_msg = f"Error generating flashcards: {e}"
+        output_box.insert(tk.END, error_msg)
+        messagebox.showerror("Error", error_msg)
 
 def run_quiz(topic, output_box, study_data):
-    """Generate a quiz for the given topic."""
     output_box.delete("1.0", tk.END)
     output_box.insert(tk.END, f"Generating quiz for {topic}...\n")
     try:
@@ -88,16 +75,14 @@ def run_quiz(topic, output_box, study_data):
             {"role": "user", "content": f"Use the following context:\n{context}\nGenerate 20 question quizzes about {topic}, formatted as 'Q: ... A: A, B, C, D'"}
         ]
         quiz = call_openai_api(model="gpt-3.5-turbo", messages=messages)
-        if quiz.startswith("Error:"):
-            raise Exception(quiz)
         output_box.insert(tk.END, quiz)
         study_data["quiz"] = quiz
     except Exception as e:
-        output_box.insert(tk.END, f"{e}")
-        messagebox.showerror("Error", str(e))
+        error_msg = f"Error generating quiz: {e}"
+        output_box.insert(tk.END, error_msg)
+        messagebox.showerror("Error", error_msg)
 
 def run_test(topic, output_box, study_data):
-    """Generate a test for the given topic."""
     output_box.delete("1.0", tk.END)
     output_box.insert(tk.END, f"Generating test for {topic}...\n")
 
@@ -138,72 +123,54 @@ def run_test(topic, output_box, study_data):
             mc_questions = mc_future.result()
             fill_questions = fill_future.result()
 
-            if mc_questions.startswith("Error:") or fill_questions.startswith("Error:"):
-                raise Exception(f"{mc_questions}\n{fill_questions}")
-
             output_box.insert(tk.END, f"\nMultiple-Choice Questions:\n{mc_questions}\n")
             output_box.insert(tk.END, f"\nFill-in-the-Blank Questions:\n{fill_questions}\n")
 
-            # Store the test in study_data
             study_data["test"] = f"{mc_questions}\n{fill_questions}"
     except Exception as e:
-        output_box.insert(tk.END, f"{e}")
-        messagebox.showerror("Error", str(e))
+        error_msg = f"Error generating test: {e}"
+        output_box.insert(tk.END, error_msg)
+        messagebox.showerror("Error", error_msg)
 
 def generate_answers(output_box, study_data):
-    """Generate answers for quizzes and tests in the study_data dictionary."""
     output_box.delete("1.0", tk.END)
     output_box.insert(tk.END, "Generating answers for quizzes and tests...\n")
     try:
-        # Check if quiz or test data exists
         if not study_data.get("quiz") and not study_data.get("test"):
             raise Exception("No quiz or test data found to generate answers.")
 
         answers = ""
 
-        # Generate answers for the quiz
         if study_data.get("quiz"):
             output_box.insert(tk.END, "Generating answers for the quiz...\n")
-            quiz_questions = study_data["quiz"].split("\n")  # Split quiz into individual questions
+            quiz_questions = study_data["quiz"].split("\n")
             quiz_answers = []
             for question in quiz_questions:
-                if question.strip():  # Skip empty lines
+                if question.strip():
                     quiz_messages = [
-                        {
-                            "role": "user",
-                            "content": f"Provide an answer for the following question:\n{question}"
-                        }
+                        {"role": "user", "content": f"Provide an answer for the following question:\n{question}"}
                     ]
                     answer = call_openai_api(model="gpt-3.5-turbo", messages=quiz_messages)
-                    if answer.startswith("Error:"):
-                        raise Exception(answer)
                     quiz_answers.append(f"{question}\nAnswer: {answer.strip()}\n")
             answers += "Quiz Answers:\n" + "\n".join(quiz_answers) + "\n\n"
 
-        # Generate answers for the test
         if study_data.get("test"):
             output_box.insert(tk.END, "Generating answers for the test...\n")
-            test_questions = study_data["test"].split("\n")  # Split test into individual questions
+            test_questions = study_data["test"].split("\n")
             test_answers = []
             for question in test_questions:
-                if question.strip():  # Skip empty lines
+                if question.strip():
                     test_messages = [
-                        {
-                            "role": "user",
-                            "content": f"Provide an answer for the following question:\n{question}"
-                        }
+                        {"role": "user", "content": f"Provide an answer for the following question:\n{question}"}
                     ]
                     answer = call_openai_api(model="gpt-3.5-turbo", messages=test_messages)
-                    if answer.startswith("Error:"):
-                        raise Exception(answer)
                     test_answers.append(f"{question}\nAnswer: {answer.strip()}\n")
             answers += "Test Answers:\n" + "\n".join(test_answers) + "\n\n"
 
-        # Save the answers to the study_data dictionary
         study_data["answers"] = answers
-
-        # Display the answers in the output box
         output_box.insert(tk.END, f"Answers:\n{answers}\n")
+
     except Exception as e:
-        output_box.insert(tk.END, f"{e}")
-        messagebox.showerror("Error", str(e))
+        error_msg = f"Error generating answers: {e}"
+        output_box.insert(tk.END, error_msg)
+        messagebox.showerror("Error", error_msg)

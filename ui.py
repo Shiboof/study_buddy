@@ -1,10 +1,11 @@
 import customtkinter as ctk
 from tkinter import filedialog
 from content_gen import generate_study_content, generate_flashcards, run_quiz, run_test, upload_context_file, generate_answers
-from storage import save_study_data_to_file
+from api.storage import save_study_data_to_file
 from PIL import Image, ImageTk  # Import Pillow for image resizing
 import sys
 from pathlib import Path
+import requests
 
 '''
 File will handle the UI setup and connect the buttons to the backend logic.
@@ -130,6 +131,16 @@ def setup_ui(root):
     buttons.append(ctk.CTkButton(button_frame, text="Study Data Answers",
                                 command=lambda: [generate_answers(output_box, study_data), update_study_data_display()],
                                 fg_color="purple", hover_color="darkviolet", width=200, height=40, corner_radius=10))
+    buttons.append(ctk.CTkButton(button_frame, text="Send Topic to API",
+                                command=lambda: send_topic_to_api(entry.get()),
+                                fg_color="gray", hover_color="darkgray",
+                                width=200, height=40, corner_radius=10))
+    buttons.append(ctk.CTkButton(button_frame, text="Show Topics from API",
+                             command=lambda: output_box.insert("end", "\n".join(get_topics_from_api()) + "\n"),
+                             fg_color="teal", hover_color="darkcyan",
+                             width=200, height=40, corner_radius=10))
+
+
 
     # Arrange buttons in a grid
     for i, button in enumerate(buttons):
@@ -156,3 +167,23 @@ def upload_file(output_box):
         result = upload_context_file(file_path)  # Call the function in content_gen.py
         output_box.insert("end", f"{result}\n")
         output_box.insert("end", f"File uploaded: {file_path}\n")
+
+def send_topic_to_api(topic):
+    try:
+        res = requests.post("http://127.0.0.1:5000/add_task", json={"task": topic}, timeout = 5)
+        if res.status_code == 200:
+            print("✅ Sent to API:", topic)
+        else:
+            print("❌ API Error:", res.json())
+    except Exception as e:
+        print("❌ Could not reach API:", e)
+
+def get_topics_from_api():
+    try:
+        res = requests.get("http://127.0.0.1:5000/get_tasks", timeout = 5)
+        if res.status_code == 200:
+            return res.json().get("tasks", [])
+        else:
+            return ["Error fetching tasks"]
+    except Exception as e:
+        return [f"API error: {e}"]

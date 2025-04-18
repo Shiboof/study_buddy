@@ -1,14 +1,11 @@
 import json
-from tkinter import messagebox, filedialog
+import os
+from tkinter import filedialog, messagebox
+uploaded_context = ""
 
-'''
-File will handle saving and loading study data
-'''
-
-uploaded_context = ""  # Global variable to store the uploaded file content
+TASK_FILE = os.path.join(os.path.dirname(__file__), "tasks.json")
 
 def upload_context_file(file_path):
-    """Read the content of the uploaded file and store it for context."""
     global uploaded_context
     try:
         with open(file_path, "r") as file:
@@ -18,13 +15,10 @@ def upload_context_file(file_path):
         return f"Error reading file: {str(e)}"
 
 def get_uploaded_context():
-    """Return the uploaded context to be used in other functions."""
     return uploaded_context
 
 def save_study_data_to_file(study_data, filename="study_material.txt"):
-    """Save the study data to a plain text file."""
     try:
-        # Open a file dialog for the user to choose
         file_path = filedialog.asksaveasfilename(
             title="Save Study Material",
             defaultextension=".txt",
@@ -33,9 +27,7 @@ def save_study_data_to_file(study_data, filename="study_material.txt"):
         if not file_path:
             return
 
-        # Write the study data to the selected file
         with open(file_path, "w") as file:
-            # Write each section of the study data to the file
             file.write("Study Content:\n")
             file.write(study_data.get("content", "") + "\n\n")
             file.write("Flashcards:\n")
@@ -50,3 +42,14 @@ def save_study_data_to_file(study_data, filename="study_material.txt"):
     except Exception as e:
         messagebox.showerror("Error", f"Failed to save study material: {str(e)}")
 
+def add_task_to_file(task):
+    tasks = get_all_tasks_from_file()
+    tasks.append(task)
+    with open(TASK_FILE, "w") as f:
+        json.dump(tasks, f)
+
+def get_all_tasks_from_file():
+    if not os.path.exists(TASK_FILE):
+        return []
+    with open(TASK_FILE, "r") as f:
+        return json.load(f)
