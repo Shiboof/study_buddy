@@ -1,6 +1,8 @@
 Study Buddy
 
-Study Buddy is a Python-based application designed to help users generate study materials, flashcards, quizzes, and tests for their learning needs. The app provides an intuitive interface built with customtkinter and includes features to upload context files and download generated content.
+Study Buddy is a full-stack Python application that helps students generate study materials, quizzes, flashcards, and tests from any topic — using the power of OpenAI's GPT models.
+
+The app includes a responsive web interface, a Flask-based backend with a clean RESTful API, and an optional desktop GUI built with CustomTkinter.
 
 Features
 1. Generate Study Content
