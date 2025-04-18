@@ -170,7 +170,7 @@ def upload_file(output_box):
 
 def send_topic_to_api(topic):
     try:
-        res = requests.post("http://127.0.0.1:5000/add_task", json={"task": topic}, timeout = 5)
+        res = requests.post("http://127.0.0.1:5000/api/add_topic", json={"topic": topic}, timeout=5)
         if res.status_code == 200:
             print("✅ Sent to API:", topic)
         else:
@@ -180,10 +180,10 @@ def send_topic_to_api(topic):
 
 def get_topics_from_api():
     try:
-        res = requests.get("http://127.0.0.1:5000/get_tasks", timeout = 5)
+        res = requests.get("http://127.0.0.1:5000/api/get_topics", timeout=5)
         if res.status_code == 200:
-            return res.json().get("tasks", [])
+            return res.json().get("topics", [])
         else:
-            return ["Error fetching tasks"]
+            return ["Error fetching topics"]
     except Exception as e:
         return [f"API error: {e}"]

@@ -1,5 +1,4 @@
 import customtkinter as ctk
-import requests
 from dotenv import load_dotenv
 import os
 from pathlib import Path
@@ -16,6 +15,7 @@ GITHUB_API_URL = "https://api.github.com/repos/Shiboof/study_buddy/releases/late
 load_dotenv()
 
 def run_gui():
+    """Launch the GUI for Study Buddy."""
     root = ctk.CTk()
     root.title("Study Buddy")
     root.geometry("1000x600")
@@ -24,6 +24,6 @@ def run_gui():
 
 if __name__ == "__main__":
     if "RUN_GUI" in os.environ:
-        run_gui()  # only runs locally with GUI support
+        run_gui()  # Launch the GUI if RUN_GUI is set
     else:
-        app.run(host="0.0.0.0", port=8080)
+        app.run(host="0.0.0.0", port=8080)  # Run the Flask API server

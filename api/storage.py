@@ -3,7 +3,7 @@ import os
 from tkinter import filedialog, messagebox
 uploaded_context = ""
 
-TASK_FILE = os.path.join(os.path.dirname(__file__), "tasks.json")
+TOPIC_FILE = os.path.join(os.path.dirname(__file__), "topics.json")
 
 def upload_context_file(file_path):
     global uploaded_context
@@ -42,14 +42,14 @@ def save_study_data_to_file(study_data, filename="study_material.txt"):
     except Exception as e:
         messagebox.showerror("Error", f"Failed to save study material: {str(e)}")
 
-def add_task_to_file(task):
-    tasks = get_all_tasks_from_file()
-    tasks.append(task)
-    with open(TASK_FILE, "w") as f:
-        json.dump(tasks, f)
+def add_topic_to_file(topic):
+    topics = get_all_topics_from_file()
+    topics.append(topic)
+    with open(TOPIC_FILE, "w") as f:
+        json.dump(topics, f)
 
-def get_all_tasks_from_file():
-    if not os.path.exists(TASK_FILE):
+def get_all_topics_from_file():
+    if not os.path.exists(TOPIC_FILE):
         return []
-    with open(TASK_FILE, "r") as f:
+    with open(TOPIC_FILE, "r") as f:
         return json.load(f)

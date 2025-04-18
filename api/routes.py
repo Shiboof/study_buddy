@@ -1,6 +1,6 @@
 from flask import request, jsonify
 from api import app
-from api.storage import add_task_to_file, get_all_tasks_from_file
+from api.storage import add_topic_to_file, get_all_topics_from_file
 from flask import send_from_directory
 from flask import request
 
@@ -10,14 +10,27 @@ def add_task():
     task = data.get("task")
     if not task:
         return jsonify({"error": "Task is required"}), 400
-    add_task_to_file(task)
+    add_topic_to_file(task)
     return jsonify({"message": "Task added", "task": task})
 
 @app.route("/api/get_tasks", methods=["GET"])
 def get_tasks():
-    from api.storage import get_all_tasks_from_file
-    tasks = get_all_tasks_from_file()
+    tasks = get_all_topics_from_file()
     return jsonify({"tasks": tasks})
+
+@app.route("/api/add_topic", methods=["POST"])
+def add_topic():
+    data = request.json
+    topic = data.get("topic")
+    if not topic:
+        return jsonify({"error": "Topic is required"}), 400
+    add_topic_to_file(topic)
+    return jsonify({"message": "Topic added", "topic": topic})
+
+@app.route("/api/get_topics", methods=["GET"])
+def get_topics():
+    topics = get_all_topics_from_file()
+    return jsonify({"topics": topics})
 
 @app.route('/flashcards')
 def flashcards():
