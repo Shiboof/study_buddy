@@ -7,7 +7,7 @@ import sys
 from ui import setup_ui
 
 
-CURRENT_VERSION = "v1.0.1"
+CURRENT_VERSION = "v1.0.2"
 GITHUB_API_URL = "https://api.github.com/repos/Shiboof/study_buddy/releases/latest"
 
 def show_ctk_messagebox(title, message, message_type="info"):
