@@ -1,6 +1,6 @@
 import tkinter as tk
 from tkinter import messagebox
-from openai import OpenAI
+from openai import OpenAI, OpenAIError, RateLimitError, APIConnectionError, AuthenticationError
 import os
 from dotenv import load_dotenv
 from concurrent.futures import ThreadPoolExecutor
@@ -28,8 +28,16 @@ def call_openai_api(model, messages, max_tokens=500, temperature=0.7):
             temperature=temperature,
         )
         return response.choices[0].message.content
+    except AuthenticationError:
+        raise RuntimeError("Authentication failed. Please check your OpenAI API key.")
+    except RateLimitError:
+        raise RuntimeError("Rate limit exceeded. Please wait and try again later.")
+    except APIConnectionError:
+        raise RuntimeError("Failed to connect to OpenAI API. Please check your internet connection.")
+    except OpenAIError as e:
+        raise RuntimeError(f"An OpenAI API error occurred: {e}")
     except Exception as e:
-        raise RuntimeError(f"OpenAI API error: {str(e)}")
+        raise RuntimeError(f"An unexpected error occurred: {e}")
 
 def generate_study_content(topic, output_box, study_data):
     output_box.delete("1.0", tk.END)
@@ -43,11 +51,14 @@ def generate_study_content(topic, output_box, study_data):
         summary = call_openai_api(model="gpt-3.5-turbo-0125", messages=messages)
         output_box.insert(tk.END, summary)
         study_data["content"] = summary
+    except RuntimeError as e:
+            error_msg = f"Error generating study content: {e}"
+            output_box.insert(tk.END, error_msg)
+            messagebox.showerror("Error", error_msg)
     except Exception as e:
-        error_msg = f"Error generating study content: {e}"
+        error_msg = f"An unexpected error occurred: {e}"
         output_box.insert(tk.END, error_msg)
         messagebox.showerror("Error", error_msg)
-
 def generate_flashcards(topic, output_box, study_data):
     output_box.delete("1.0", tk.END)
     output_box.insert(tk.END, f"Generating flashcards for {topic}...\n")
@@ -60,8 +71,12 @@ def generate_flashcards(topic, output_box, study_data):
         flashcards = call_openai_api(model="gpt-3.5-turbo", messages=messages)
         output_box.insert(tk.END, f"\nFlashcards:\n{flashcards}")
         study_data["flashcards"] = flashcards
-    except Exception as e:
+    except RuntimeError as e:
         error_msg = f"Error generating flashcards: {e}"
+        output_box.insert(tk.END, error_msg)
+        messagebox.showerror("Error", error_msg)
+    except Exception as e:
+        error_msg = f"An unexpected error occurred: {e}"
         output_box.insert(tk.END, error_msg)
         messagebox.showerror("Error", error_msg)
 
@@ -77,6 +92,9 @@ def run_quiz(topic, output_box, study_data):
         quiz = call_openai_api(model="gpt-3.5-turbo", messages=messages)
         output_box.insert(tk.END, quiz)
         study_data["quiz"] = quiz
+    except RuntimeError as e:
+        error_msg = f"Error generating flashcards: {e}"
+        output_box.insert(tk.END, error_msg)
     except Exception as e:
         error_msg = f"Error generating quiz: {e}"
         output_box.insert(tk.END, error_msg)
@@ -127,6 +145,9 @@ def run_test(topic, output_box, study_data):
             output_box.insert(tk.END, f"\nFill-in-the-Blank Questions:\n{fill_questions}\n")
 
             study_data["test"] = f"{mc_questions}\n{fill_questions}"
+    except RuntimeError as e:
+        error_msg = f"Error generating flashcards: {e}"
+        output_box.insert(tk.END, error_msg)
     except Exception as e:
         error_msg = f"Error generating test: {e}"
         output_box.insert(tk.END, error_msg)
@@ -169,7 +190,9 @@ def generate_answers(output_box, study_data):
 
         study_data["answers"] = answers
         output_box.insert(tk.END, f"Answers:\n{answers}\n")
-
+    except RuntimeError as e:
+        error_msg = f"Error generating flashcards: {e}"
+        output_box.insert(tk.END, error_msg)
     except Exception as e:
         error_msg = f"Error generating answers: {e}"
         output_box.insert(tk.END, error_msg)
